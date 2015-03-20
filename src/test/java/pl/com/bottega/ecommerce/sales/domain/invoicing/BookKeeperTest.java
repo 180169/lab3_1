@@ -88,4 +88,23 @@ public class BookKeeperTest {
         Assert.assertThat(invoice.getItems().size(), is(1));
     }
 
+    @Test
+    public void issuance_requestForInvoiceWithZeroElements_callTaxPolicyCalculateZeroTimes() {
+        //Given
+        InvoiceFactory mockInvoiceFactory = mock(InvoiceFactory.class);
+        TaxPolicy mockTaxPolicy = mock(TaxPolicy.class);
+
+        ClientData clientData = new ClientData(Id.generate(), "godzio");
+        InvoiceRequest invoiceRequest = new InvoiceRequest(clientData);
+
+        BookKeeper bookKeeper = new BookKeeper(mockInvoiceFactory);
+
+        //When
+        when(mockTaxPolicy.calculateTax((ProductType) any(), (Money) any())).thenReturn(new Tax(new Money(1), ""));
+        when(mockInvoiceFactory.create(clientData)).thenReturn(new Invoice(Id.generate(), clientData));
+        bookKeeper.issuance(invoiceRequest, mockTaxPolicy);
+        //Then
+
+        verify(mockTaxPolicy, times(0)).calculateTax((ProductType) any(), (Money) any());
+    }
 }
