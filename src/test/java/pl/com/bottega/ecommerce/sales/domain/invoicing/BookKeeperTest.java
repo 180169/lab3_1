@@ -85,7 +85,7 @@ public class BookKeeperTest {
         Invoice invoice = bookKeeper.issuance(invoiceRequest, mockTaxPolicy);
         //Then
 
-        Assert.assertThat(invoice.getItems().size(), is(1));
+        Assert.assertThat(invoice.getItems().size(), is(0));
     }
 
     @Test
